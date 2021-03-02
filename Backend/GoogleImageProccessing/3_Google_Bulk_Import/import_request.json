@@ -1,0 +1,7 @@
+{
+  "inputConfig": {
+    "gcsSource": {
+      "csvFileUri": "gs://image_indexing_hclstore_catalog/Emerald/csv/GoogleImageProccessing.csv"
+    }
+  }
+}

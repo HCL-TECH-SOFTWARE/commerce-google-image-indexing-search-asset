@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+======================================================================
+Copyright [2021] [HCL Technologies]
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+=========================================================================
+-->
+<_config:DataloadBusinessObjectConfiguration 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.ibm.com/xmlns/prod/commerce/foundation/config ../../../WC/xml/config/xsd/wc-dataload-businessobject.xsd" 
+	xmlns:_config="http://www.ibm.com/xmlns/prod/commerce/foundation/config">
+
+  <_config:DataLoader className="com.ibm.commerce.foundation.dataload.BusinessObjectLoader">
+    <_config:DataReader className="com.ibm.commerce.foundation.dataload.datareader.UniqueIdReader" >
+    	    <_config:Query>
+    	      <_config:SQL>
+	    	    <![CDATA[
+    				SELECT CATENTRY.CATENTRY_ID
+					FROM CATENTRY CATENTRY
+					JOIN CATGPENREL ON CATENTRY.CATENTRY_ID = CATGPENREL.CATENTRY_ID
+					JOIN CATGRPREL ON CATGPENREL.CATGROUP_ID = CATGRPREL.CATGROUP_ID_CHILD AND CATGPENREL.CATALOG_ID = CATGRPREL.CATALOG_ID
+					JOIN CATALOG ON CATGRPREL.CATALOG_ID = CATALOG.CATALOG_ID 
+					JOIN STOREDEFCAT ON CATALOG.CATALOG_ID = STOREDEFCAT.CATALOG_ID
+					WHERE STOREDEFCAT.STOREENT_ID = ? 
+					ORDER BY CATGPENREL.CATGROUP_ID, CATENTRY.CATENTRY_ID
+    		    ]]>
+    	      </_config:SQL>
+    	      <_config:Param name="storeId" valueFrom="BusinessContext" />
+    	    </_config:Query>
+    </_config:DataReader>
+
+    <_config:BusinessObjectBuilder>
+      <_config:BusinessObjectMediator className="com.ibm.commerce.foundation.dataload.businessobjectmediator.AssociatedObjectMediator" >
+    	    <_config:Query>
+    	      <_config:SQL>
+    	    	<![CDATA[
+					SELECT CONCAT('gs://image_indexing_hclstore_catalog/Emerald', CATENTDESC.FULLIMAGE) AS GOOGLE_STORAGE_IMAGE_PATH, CATENTRY.CATENTRY_ID, 
+					'Emerald' AS PRODUCT_SET_ID, CATENTRY.PARTNUMBER, 'homegoods-v2' AS GOOGLE_PRODUCT_CATEGORY, TRIM(CATENTDESC.NAME) AS NAME, 
+						'PARTNUMBER=' || CATENTRY.PARTNUMBER ||
+						',NAME=' || TRIM(CATENTDESC.NAME) ||
+						',CATEGORY_NAME=' || CATGRPDESC_PARENT.NAME ||
+						',SUB_CATEGORY_NAME=' || CATGRPDESC_CHILD.NAME AS GOOGLE_PRODUCT_LABELS,
+						'0,0,600,0,0,600,600,600' AS GOOGLE_BOUNDING_POLY
+					FROM CATENTRY CATENTRY
+					JOIN CATENTDESC ON CATENTRY.CATENTRY_ID = CATENTDESC.CATENTRY_ID AND CATENTDESC.LANGUAGE_ID = -1
+					JOIN CATGPENREL ON CATENTRY.CATENTRY_ID = CATGPENREL.CATENTRY_ID
+					JOIN CATGRPDESC CATGRPDESC_CHILD ON CATGPENREL.CATGROUP_ID = CATGRPDESC_CHILD.CATGROUP_ID AND CATGRPDESC_CHILD.LANGUAGE_ID = -1
+					JOIN CATGRPREL ON CATGPENREL.CATGROUP_ID = CATGRPREL.CATGROUP_ID_CHILD AND CATGPENREL.CATALOG_ID = CATGRPREL.CATALOG_ID
+					JOIN CATGRPDESC CATGRPDESC_PARENT ON CATGRPREL.CATGROUP_ID_PARENT = CATGRPDESC_PARENT.CATGROUP_ID AND CATGRPDESC_PARENT.LANGUAGE_ID = -1
+					JOIN CATALOG ON CATGRPREL.CATALOG_ID = CATALOG.CATALOG_ID 
+					JOIN STOREDEFCAT ON CATALOG.CATALOG_ID = STOREDEFCAT.CATALOG_ID
+					WHERE CATENTRY.CATENTRY_ID IN (?) 
+					ORDER BY CATGPENREL.CATGROUP_ID, CATENTRY.CATENTRY_ID
+    	   		 ]]>
+    	      </_config:SQL>
+    	      <_config:Param name="CATENTRY_ID" />
+
+			  <_config:ColumnMapping name="GOOGLE_STORAGE_IMAGE_PATH" value="GoogleStorageImagePath" />
+    	      <_config:ColumnMapping name="CATENTRY_ID" value="CatEntryId" />
+			  <_config:ColumnMapping name="PRODUCT_SET_ID" value="ProductSetId" />
+    	      <_config:ColumnMapping name="PARTNUMBER" value="PartNumber" />
+			  <_config:ColumnMapping name="GOOGLE_PRODUCT_CATEGORY" value="GoogleProductCategory" />
+    	      <_config:ColumnMapping name="NAME" value="Name" />
+			  <_config:ColumnMapping name="GOOGLE_PRODUCT_LABELS" value="GoogleProductLabels" />
+			  <_config:ColumnMapping name="GOOGLE_BOUNDING_POLY" value="GoogleBoundingPoly" />
+    	    </_config:Query>
+        
+   		<_config:DataWriter className="com.ibm.commerce.foundation.dataload.datawriter.CSVWriter">
+      		<_config:Data>
+	     		<_config:column number="1" name="GoogleStorageImagePath" />
+	      		<_config:column number="2" name="CatEntryId" />
+	      		<_config:column number="3" name="ProductSetId" />
+	      		<_config:column number="4" name="PartNumber" />
+				<_config:column number="5" name="GoogleProductCategory" />
+				<_config:column number="6" name="Name" />
+				<_config:column number="7" name="GoogleProductLabels" />
+				<_config:column number="8" name="GoogleBoundingPoly" />
+	    	</_config:Data>
+    	</_config:DataWriter>
+      </_config:BusinessObjectMediator>
+    </_config:BusinessObjectBuilder>
+
+   </_config:DataLoader>
+
+</_config:DataloadBusinessObjectConfiguration>
