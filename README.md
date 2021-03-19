@@ -1,6 +1,6 @@
 # Google Image indexing and Search
 
-## It provide the capability to index the Google Vision results as part of a searchable context for the catalog images.
+## Provides the capability to index the Google Vision results as part of a searchable context for the catalog images.
 
 **Google Image Indexing allow user to create products, each containing reference images that visually describe the product from a set of viewpoints.It helps in refining the result when user execute the Image Search.When users query the product set with their own images, Vision API applies machine learning to compare the product in the user's query image with the images in the user's product set, and then returns a ranked list of visually and semantically similar results.**
 
