@@ -1,10 +1,15 @@
 # Google Image indexing and Search
 
-## Provides the capability to index the Google Vision results as part of a searchable context for the catalog images.
+## WARRANTY & SUPPORT 
+HCL Software provides HCL Commerce open source assets “as-is” without obligation to support them nor warranties or any kind, either express or implied, including the warranty of title, non-infringement or non-interference, and the implied warranties and conditions of merchantability and fitness for a particular purpose. HCL Commerce open source assets are not covered under the HCL Commerce master license nor Support contracts.
 
-**DISCLAIMER:  This asset is being provided as-is to help accelerate your projects.  As such, we are unable to provide official support for this asset.  We have provided documentation as well as any needed code artifacts for your use.**
+If you have questions or encounter problems with an HCL Commerce open source asset, please open an issue in the asset's GitHub repository. For more information about [GitHub issues](https://docs.github.com/en/issues), including creating an issue, please refer to [GitHub Docs](https://docs.github.com/en). The HCL Commerce Innovation Factory Team, who develops HCL Commerce open source assets, monitors GitHub issues and will do their best to address them. 
 
-**Google Image Indexing allow user to create products, each containing reference images that visually describe the product from a set of viewpoints.It helps in refining the result when user execute the Image Search.When users query the product set with their own images, Vision API applies machine learning to compare the product in the user's query image with the images in the user's product set, and then returns a ranked list of visually and semantically similar results.**
+## HCLC Google Image Indexing & Search Asset
+
+Provides the capability to index the Google Vision results as part of a searchable context for the catalog images.
+
+Google Image Indexing allow user to create products, each containing reference images that visually describe the product from a set of viewpoints.It helps in refining the result when user execute the Image Search.When users query the product set with their own images, Vision API applies machine learning to compare the product in the user's query image with the images in the user's product set, and then returns a ranked list of visually and semantically similar results.
 
 **Prerequisites**
 
